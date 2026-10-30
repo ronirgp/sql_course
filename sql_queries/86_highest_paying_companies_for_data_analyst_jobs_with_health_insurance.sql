@@ -1,0 +1,15 @@
+-- Question: Which 10 companies have the highest average yearly salary for Data Analyst jobs that offer -- health insurance? 
+
+SELECT company_dim.name AS company_name,
+ROUND(AVG(job_postings_fact.salary_year_avg), 0) AS average_salary
+FROM job_postings_fact
+INNER JOIN company_dim
+ON job_postings_fact.company_id = company_dim.company_id
+WHERE job_postings_fact.job_title_short = 'Data Analyst'
+AND job_postings_fact.job_health_insurance = TRUE
+AND job_postings_fact.salary_year_avg IS NOT NULL
+GROUP BY company_dim.name
+HAVING COUNT(*) >= 5
+ORDER BY average_salary DESC
+LIMIT 10;
+
